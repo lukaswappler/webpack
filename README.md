@@ -2,7 +2,9 @@
 webpack
 
 
-run npm run build
+run 
+- npm run build
+- npm run watch
 
 Tutorial progress:
-https://webpack.js.org/guides/output-management/
+https://webpack.js.org/guides/code-splitting/
