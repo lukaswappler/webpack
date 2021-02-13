@@ -1,11 +1,25 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {  
+  mode: 'development',
   entry: {
-    index: './src/index.js',
-    print: './src/print.js',
+    index: {
+      import: './src/index.js',
+      dependOn: "shared"
+    },    
+    bomberman: {
+        import: './src/bomberman-module.js',
+        dependOn: 'shared'
+    },
+    vuebomber: {
+      import: './src/app.js',
+      dependOn: "shared"
+    },    
+    shared: 'lodash',
+    print: './src/print.js'
   },
   devtool: 'inline-source-map',
   devServer: {
@@ -15,10 +29,12 @@ module.exports = {
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new HtmlWebpackPlugin({
       title: 'My Webpack project',
+      template: 'src/vue.html'
     }),
+    new VueLoaderPlugin()
   ],
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
@@ -35,6 +51,13 @@ module.exports = {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
+      {
+        test: /\.vue$/i,
+        use: 'vue-loader'
+      },
     ],
   },
+  optimization: {
+    runtimeChunk: 'single',
+  }
 };
