@@ -15,7 +15,7 @@ export default {
         return {
             'width': 16,
             'height': 16,
-            'bombExplodeRate': 500,
+            'bombExplodeRate': 50,
             'tickBackgroundInterval': null,
             'backgroundImage': bombermanTiles,
             'backgroundPositionPointer': 0,
@@ -35,6 +35,13 @@ export default {
                     '-362px -495px',
                     '-345px -495px'
                 ],
+                'tt': [
+                    '-362px -529px',
+                    '-379px -529px',
+                    '-396px -529px',
+                    '-311px -546px',
+                    '-328px -546px'
+                ],               
                 'd': [
                     '-362px -546px',
                     '-379px -546px',
@@ -42,12 +49,26 @@ export default {
                     '-345px -546px',
                     '-328px -495px'
                 ],
+                 'dd': [
+                    '-362px -529px',
+                    '-379px -529px',
+                    '-396px -529px',
+                    '-311px -546px',
+                    '-328px -546px'
+                ],     
                 'l': [
                     '-345px -478px',
                     '-328px -478px',
                     '-311px -478px',
                     '-294px -478px',
                     '-277px -478px'
+                ],
+                'll': [
+                    '-277px -512px',
+                    '-277px -529px',
+                    '-277px -546px',
+                    '-311px -512px',
+                    '-311px -529px'
                 ],
                 'r': [
                     '-294px -512px',
@@ -56,28 +77,7 @@ export default {
                     '-328px -512px',
                     '-328px -529px'
                 ],
-                'tt': [
-                    '-379px -495px',
-                    '-396px -478px',
-                    '-396px -495px',
-                    '-362px -495px',
-                    '-345px -495px'
-                ],
-                'dd': [
-                    '-362px -546px',
-                    '-379px -546px',
-                    '-396px -546px',
-                    '-345px -546px',
-                    '-328px -495px'
-                ],
-                'll': [
-                    '-345px -478px',
-                    '-328px -478px',
-                    '-311px -478px',
-                    '-294px -478px',
-                    '-277px -478px'
-                ],
-                'rr': [
+                 'rr': [
                     '-277px -512px',
                     '-277px -529px',
                     '-277px -546px',
@@ -98,15 +98,13 @@ export default {
             }
         },
         changeBackground: function() {
-            console.log("XXXX");
             this.backgroundPosition = this.backgroundPositions[this.explosionType][this.backgroundPositionPointer];
 
             this.backgroundPositionPointer = this.backgroundPositionPointer + 1;
 
             //animation end
             //destroy explsoion element itself
-            if (this.backgroundPositionPointer >= this.backgroundPositions[this.explosionType].length) {
-                console.log('stop all');
+            if (this.backgroundPositionPointer >= this.backgroundPositions[this.explosionType].length) {                
                 clearInterval(this.tickBackgroundInterval);
 
                 this.$destroy();
@@ -118,15 +116,12 @@ export default {
     },
     created: function() {
     },
-    mounted: function () {
-        console.log('EXPLOSION MOUNTED')
+    mounted: function () {        
         this.backgroundPosition = this.backgroundPositions[this.explosionType][this.backgroundPositionPointer];
 
         this.tickBackgroundInterval = setInterval(() => {
             this.changeBackground();
         }, this.bombExplodeRate);
-
-
     }
 }
 </script>

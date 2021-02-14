@@ -61,12 +61,7 @@ export default {
         changeExplodeBackground: function() {
             this.backgroundPosition = this.backgroundExplodePositions[this.backgroundPositionPointer];
 
-            this.backgroundPositionPointer = this.backgroundPositionPointer + 1;
-            //this.backgroundPositionPointer = this.backgroundPositionPointer % this.backgroundExplodePositions.length;
-
-
-
-
+            this.backgroundPositionPointer = this.backgroundPositionPointer + 1;            
 
             //animation end
             //destroy bomb itself
@@ -76,15 +71,7 @@ export default {
                 this.$destroy();
 
                 //// remove the element from the DOM
-                this.$el.parentNode.removeChild(this.$el);
-
-
-                //trigger explosions in radius
-                console.log('row', this.row);
-                console.log('col', this.col);
-
-                console.log(this);
-
+                this.$el.parentNode.removeChild(this.$el);    
 
             }
 
@@ -94,11 +81,7 @@ export default {
         console.log('bomb created');
     },
     mounted: function () {
-        console.log('bomb mounted');
-
-        console.log('row', this.row);
-        console.log('col', this.col);
-
+        
         this.tickBackgroundInterval = setInterval(() => {
             this.changeBackground();
         }, this.bombTickRate);
@@ -116,22 +99,12 @@ export default {
                     let tiles = this.playground.$children[0].$children;
 
                     let center = tiles.filter(child => child.row === this.row  && child.col ===this.col)[0];
-                    //console.log(this.playground.$children[0].$children)
-                    //let center = this.playground.$children[0].$children.filter(child => true)[10];
                     
-                    //console.log(center);
-                    //console.log('XX: ', i);
-
                     let top = tiles.filter(child => child.row === this.row - i && child.col ===this.col)[0];
                     let down = tiles.filter(child => child.row === this.row + i && child.col ===this.col)[0];
                     let left = tiles.filter(child => child.row === this.row && child.col ===this.col - i)[0];
                     let right = tiles.filter(child => child.row === this.row && child.col ===this.col + i)[0];
-                    /*
-                    console.log(this.playground);
-                    console.log(this.playground.$children[0].$options);
-                    console.log(this.playground.$children[0].$options._componentTag);
-                    console.log(left);
-                    */
+                    
                     center.$emit('bombExplosion','c');
                     if (top) {
                         top.$emit('bombExplosion',  (i === this.bombRadius ? 't' : 'tt'));
@@ -141,10 +114,10 @@ export default {
                         down.$emit('bombExplosion',  (i === this.bombRadius ? 'd' : 'dd'));
                     }
 
-                    if (left) {
+                    if (left) {                        
                         left.$emit('bombExplosion',  (i === this.bombRadius ? 'l' : 'll'));
                     }
-                    if (right) {
+                    if (right) {                        
                         right.$emit('bombExplosion',  (i === this.bombRadius ? 'r' : 'rr'));
                     }
                 }
