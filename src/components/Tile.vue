@@ -10,7 +10,7 @@ import Bomb from './Bomb.vue'
 import BombExplosion from './BombExplosion.vue'
 
 export default {
-    props: ['col', 'row', 'isBorder', 'isBlock'],
+    props: ['col', 'row', 'isBorder', 'isBlock', 'isDestroyableBlock'],
     template: '<div v-bind:style="styleObject()"></div>',
     computed: {
 
@@ -29,6 +29,8 @@ export default {
                 background = 'url(\''+ bombermanTiles + '\')  -294px -461px';
             } else if (this.isBlock) {
                 background = 'url(\''+ bombermanTiles + '\')  -294px -461px';
+            } else if (this.isDestroyableBlock) {
+                background = 'url(\''+ bombermanTiles + '\')  -311px -461px';
             } else {
                 background = 'url(\''+ bombermanTiles + '\')  -328px -461px';
             }
@@ -103,7 +105,11 @@ export default {
             this.$el.appendChild(instance.$el);
         },
         isExplosionPossible: function() {
-            return !this.isBorder && !this.isBlock;
+            return !this.isBorder && !this.isBlock && !this.isDestroyableBlock;
+        },
+
+        isAccessible: function() {
+            return !this.isBorder && !this.isBlock && !this.isDestroyableBlock;
         }
 
     },
@@ -111,6 +117,16 @@ export default {
         console.log('tile created');
     },
     mounted: function () {
+
+        //Erste 3 Felder freihalten, ansonsten  zufällig füllen        
+        if (!((this.row == 1 && this.col ==1) ||
+            (this.row == 1 && this.col ==2) ||
+            (this.row == 2 && this.col ==1))  &&
+            Math.random() > 0.6) {
+            this.isDestroyableBlock = true;
+        }
+        
+
         console.log('tile mounted');
         this.$on('dropBombEvent', this.addBomb);
         

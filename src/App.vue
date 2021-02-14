@@ -161,8 +161,8 @@ module.exports = {
 
                 let newField1 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow1 && child.col === newFieldCol)[0];
                 let newField2 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow2 && child.col === newFieldCol)[0];
-                if (newField1 && !newField1.isBlock && !newField1.isBorder &&
-                    newField2 && !newField2.isBlock && !newField2.isBorder) {
+                if (newField1 && newField1.isAccessible() &&
+                    newField2 && newField2.isAccessible()) {
                     //this.player.left = newLeft;
                     setNewLeft = true;
                 } else {
@@ -191,8 +191,8 @@ module.exports = {
 
                 let newField1 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow1 && child.col === newFieldCol)[0];
                 let newField2 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow2 && child.col === newFieldCol)[0];
-                if (newField1 && !newField1.isBlock && !newField1.isBorder &&
-                    newField2 && !newField2.isBlock && !newField2.isBorder) {
+                if (newField1 && newField1.isAccessible()  &&
+                    newField2 && newField2.isAccessible()) {
 
                     setNewLeft = true;
                     //this.player.left = newLeft;
@@ -231,8 +231,8 @@ module.exports = {
 
                 let newField1 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow && child.col === newFieldCol_1)[0];
                 let newField2 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow && child.col === newFieldCol_2)[0];
-                if (newField1 && !newField1.isBlock && !newField1.isBorder &&
-                    newField2 && !newField2.isBlock && !newField2.isBorder) {
+                if (newField1 && newField1.isAccessible() &&
+                    newField2 && newField2.isAccessible()) {
 
                     //this.player.top = newTop;
                     setNewTop = true;
@@ -260,8 +260,8 @@ module.exports = {
 
                 let newField1 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow && child.col === newFieldCol_1)[0];
                 let newField2 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow && child.col === newFieldCol_2)[0];
-                if (newField1 && !newField1.isBlock && !newField1.isBorder &&
-                    newField2 && !newField2.isBlock && !newField2.isBorder) {
+                if (newField1 && newField1.isAccessible() &&
+                    newField2 && newField2.isAccessible()) {
 
                     //this.player.top = newTop;
                     setNewTop = true;
