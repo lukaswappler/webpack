@@ -5,21 +5,12 @@ const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {  
   mode: 'development',
-  entry: {
-    index: {
-      import: './src/index.js',
-      dependOn: "shared"
-    },    
-    bomberman: {
-        import: './src/bomberman-module.js',
-        dependOn: 'shared'
-    },
+  entry: {    
     vuebomber: {
       import: './src/app.js',
       dependOn: "shared"
     },    
-    shared: 'lodash',
-    print: './src/print.js'
+    shared: 'lodash'    
   },
   devtool: 'inline-source-map',
   devServer: {
