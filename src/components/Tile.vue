@@ -101,6 +101,9 @@ export default {
 
             instance.$mount();
             this.$el.appendChild(instance.$el);
+        },
+        isExplosionPossible: function() {
+            return !this.isBorder && !this.isBlock;
         }
 
     },

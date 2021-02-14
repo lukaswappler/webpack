@@ -4,7 +4,6 @@
 </template>
 
 <script>
-import bombermanPlayers from '.././assets/super_bomberman_players.png';
 import bombermanTiles from '.././assets/super_bomberman_tiles.png';
 
 export default {
@@ -51,8 +50,6 @@ export default {
             }
         },
         changeBackground: function() {
-            console.log('changeBackground');
-
             this.backgroundPositionPointer = this.backgroundPositionPointer + 1;
             this.backgroundPositionPointer = this.backgroundPositionPointer % this.backgroundPositions.length;
 
@@ -72,10 +69,41 @@ export default {
 
                 //// remove the element from the DOM
                 this.$el.parentNode.removeChild(this.$el);    
-
             }
 
-        }
+        },
+        createTileExplosions: function (bombRadius, direction, row, col) {
+                    let tiles = this.playground.$children[0].$children;
+                    let foundTiles = new Array();
+                    
+                    for (var i = 1; i <= bombRadius; i++) {
+                        let tile;
+
+                        //Todo, viel schöner machen mit getLeftTile oder so
+                        if (direction === 't') {
+                            tile = tiles.filter(child => child.row === row - i && child.col === col)[0];
+                        } else if (direction === 'd') {
+                            tile = tiles.filter(child => child.row === row + i && child.col === col)[0];
+                        } else if (direction === 'l') {
+                            tile = tiles.filter(child => child.row === row && child.col === col - i)[0];
+                        } else if (direction === 'r') {
+                           tile = tiles.filter(child => child.row === row && child.col === col + i)[0];
+                        }                                
+
+                        if (tile && tile.isExplosionPossible()) {
+                            foundTiles.push(tile);                        
+                        }  else {
+                            //blockade gefunden
+                            break;
+                        }
+                    }    
+
+                    let counter = 0;
+                    foundTiles.forEach(function(tile) {
+                        counter++;
+                        tile.$emit('bombExplosion',  (counter === foundTiles.length ? direction : direction + direction));
+                    });
+                }
     },
     created: function() {
         console.log('bomb created');
@@ -95,48 +123,27 @@ export default {
             //trigger explosion
             if (this.playground) {
 
-                for (var i = 1; i <= this.bombRadius; i++) {
-                    let tiles = this.playground.$children[0].$children;
+                let tiles = this.playground.$children[0].$children;
 
-                    let center = tiles.filter(child => child.row === this.row  && child.col ===this.col)[0];
-                    
-                    let top = tiles.filter(child => child.row === this.row - i && child.col ===this.col)[0];
-                    let down = tiles.filter(child => child.row === this.row + i && child.col ===this.col)[0];
-                    let left = tiles.filter(child => child.row === this.row && child.col ===this.col - i)[0];
-                    let right = tiles.filter(child => child.row === this.row && child.col ===this.col + i)[0];
-                    
-                    center.$emit('bombExplosion','c');
-                    if (top) {
-                        top.$emit('bombExplosion',  (i === this.bombRadius ? 't' : 'tt'));
-                    }
-
-                    if (down) {
-                        down.$emit('bombExplosion',  (i === this.bombRadius ? 'd' : 'dd'));
-                    }
-
-                    if (left) {                        
-                        left.$emit('bombExplosion',  (i === this.bombRadius ? 'l' : 'll'));
-                    }
-                    if (right) {                        
-                        right.$emit('bombExplosion',  (i === this.bombRadius ? 'r' : 'rr'));
-                    }
-                }
-
+                //center
+                let center = tiles.filter(child => child.row === this.row  && child.col ===this.col)[0];
+                center.$emit('bombExplosion','c');
+                
+                //other directions
+                this.createTileExplosions( this.bombRadius, 't', this.row, this.col);
+                this.createTileExplosions( this.bombRadius, 'd', this.row, this.col);
+                this.createTileExplosions( this.bombRadius, 'r', this.row, this.col);
+                this.createTileExplosions( this.bombRadius, 'l', this.row, this.col);
+                
                 this.$destroy();
 
                 //// remove the element from the DOM
                 this.$el.parentNode.removeChild(this.$el);
             }
 
-            //explode
-            /*
-            this.exploadeBackgroundInterval = setInterval(() => {
-                this.changeExplodeBackground();
-            }, this.bombExplodeRate);
-            */
-
         }.bind(this), this.bombExplosionTimer);
 
-    }
+    },
+    
 }
 </script>
