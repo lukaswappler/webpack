@@ -19,16 +19,45 @@ export default {
         let isDestroyableBlock = false;
         
           //Erste 3 Felder freihalten, ansonsten  zufällig füllen        
-        if (!((this.row == 1 && this.col ==1) ||
+        if (!this.isBorder && !this.isBlock &&
+            !((this.row == 1 && this.col ==1) ||
             (this.row == 1 && this.col ==2) ||
             (this.row == 2 && this.col ==1))  &&
             Math.random() > 0.6) {
             isDestroyableBlock = true;
         }
+        
+        let destroyableBackground = '-311px -461px';
+        let greenBackground = '-328px -461px'
+        let blockBackground = '-294px -461px';
+        let borderBackgroudn = '-294px -461px';
+        let backgroundPosition;
 
+        if (this.isBorder) {
+            backgroundPosition = borderBackgroudn;
+        } else if (this.isBlock) {
+            backgroundPosition = blockBackground;
+        } else if (isDestroyableBlock) {
+            backgroundPosition = destroyableBackground;
+        } else {
+            backgroundPosition = greenBackground;
+        }
         return {
             'isDestroyableBlock' : isDestroyableBlock,
             'backgroundImage': bombermanTiles,
+            'backgroundPosition' : backgroundPosition,
+            'borderBackgroudn' : borderBackgroudn,
+            'blockBackground' : blockBackground,
+            'greenBackground' : greenBackground,
+            'destroyableBackground' : destroyableBackground,
+            'wallBackgroundPositions': [
+                '-277px -563px',
+                '-294px -563px',
+                '-311px -563px',
+                '-328px -563px',
+                '-345px -563px',
+                '-362px -563px'                
+            ],
         };
     },
     name: 'tile',
@@ -40,17 +69,8 @@ export default {
             const posLeft = col * 16;
             const posTop = row * 16;
 
-            let backgroundPosition;
-            if (this.isBorder) {
-                backgroundPosition = '-294px -461px';
-            } else if (this.isBlock) {
-                backgroundPosition = '-294px -461px';
-            } else if (this.isDestroyableBlock) {
-                backgroundPosition = '-311px -461px';
-            } else {
-                backgroundPosition = '-328px -461px';
-            }
-
+           
+            console.log('style');
             return {
 
                 'image-rendering': 'optimizeSpeed',
@@ -64,7 +84,7 @@ export default {
                 'z-index': 100,
                 position: 'absolute',
                 'background-image':  'url(\'' + this.backgroundImage + '\')',                
-                'background-position': backgroundPosition,                                
+                'background-position': this.backgroundPosition,                                
                 //background: 'url(\'super_bomberman_tiles.png\')  -277px -461px',
                 //background: 'url(\'super_bomberman_tiles.png\')  -294px -461px',
                 //background: background ,
@@ -75,13 +95,6 @@ export default {
             }
         },
         addBomb: function() {
-            console.log('addBomb');
-            console.log(this.$el);
-
-
-            console.log(123);
-            console.log(Bomb);
-            console.log(456);
             let bombClass = Vue.extend(Bomb);
             let instance = new bombClass();
 
@@ -89,24 +102,26 @@ export default {
             instance.col = this.col;
             instance.playground = this.$root;
 
-            console.log('pre mount');
-            console.log(instance);
-            
-            console.log('after mount');
-
-            //instance.$mount() // pass nothing
-            //this.$refs.container.appendChild(instance.$el)
+            this.currentBomb = instance;
 
             instance.$mount();
             this.$el.appendChild(instance.$el);
             
         },
         addExplosion: function(explosionType) {
+            
+            
 
             //no explosion on solid things
             if (this.isBlock || this.isBorder) {
                 return;
             }
+            
+            if (this.currentBomb && !this.currentBomb.isExploded) {
+                console.log('double');
+                this.currentBomb.explodeBomb();
+            };
+            
 
             console.log('addExplosion');
 
@@ -124,6 +139,32 @@ export default {
             instance.$mount();
             this.$el.appendChild(instance.$el);
         },
+        destroyTile: function() {
+
+            if (this.isDestroyableBlock) {
+                console.log("DESTROY");
+
+                this.backgroundPositionWallPointer = 0;
+                this.changeWallBreakBackground();
+
+                this.destroyTileInterval = setInterval(() => {
+                    this.changeWallBreakBackground();
+                }, 200);
+            }
+        },
+
+        changeWallBreakBackground: function() {             
+            this.backgroundPosition = this.wallBackgroundPositions[this.backgroundPositionWallPointer];
+            this.backgroundPositionWallPointer = this.backgroundPositionWallPointer + 1;
+
+            //animation end
+            if (this.backgroundPositionWallPointer > this.wallBackgroundPositions.length) {                
+                clearInterval(this.destroyTileInterval);
+                this.isDestroyableBlock = false;
+                this.backgroundPosition = this.greenBackground;
+            }
+        },
+
         isExplosionPossible: function() {
             return !this.isBorder && !this.isBlock && !this.isDestroyableBlock;
         },
@@ -144,15 +185,8 @@ export default {
     },
     mounted: function () {
 
-        
-        
-
-        console.log('tile mounted');
         this.$on('dropBombEvent', this.addBomb);
-        
-        
         this.$on('bombExplosion', this.addExplosion);
-
     }
 }
 </script>

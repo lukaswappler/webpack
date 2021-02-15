@@ -81,6 +81,9 @@ module.exports = {
                   if (this.player === null) {
                       this.player = this.$children.filter(child => child.$options._componentTag === 'player')[0];
                   }
+                  if (this.player.isDeath) {                
+                    return;
+                }
 
                   let currentFieldRow = Math.ceil((this.player.top + 6 ) / 16) ;
                   let currentFieldCol = Math.ceil((this.player.left) / 16);

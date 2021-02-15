@@ -87,12 +87,13 @@ export default {
                         } else if (direction === 'l') {
                             tile = tiles.filter(child => child.row === row && child.col === col - i)[0];
                         } else if (direction === 'r') {
-                           tile = tiles.filter(child => child.row === row && child.col === col + i)[0];
+                            tile = tiles.filter(child => child.row === row && child.col === col + i)[0];
                         }                                
 
                         if (tile && tile.isExplosionPossible()) {
                             foundTiles.push(tile);                        
                         }  else {
+                            tile.destroyTile();
                             //blockade gefunden
                             break;
                         }
@@ -103,6 +104,39 @@ export default {
                         counter++;
                         tile.$emit('bombExplosion',  (counter === foundTiles.length ? direction : direction + direction));
                     });
+                },
+                explodeBomb: function() {
+                    //stop ticker background
+                    clearInterval(this.tickBackgroundInterval);
+
+                    this.backgroundPositionPointer = 0;
+
+                    //trigger explosion
+                    if (this.playground) {
+
+                        let tiles = this.playground.$children[0].$children;
+
+                        this.$destroy();
+
+                        //// remove the element from the DOM
+                        this.$el.parentNode.removeChild(this.$el);
+
+                        this.isExploded = true;
+
+                        clearInterval(this.bomeExplosionTimeout);
+
+                        //center
+                        let center = tiles.filter(child => child.row === this.row  && child.col ===this.col)[0];                
+                        center.$emit('bombExplosion','c');
+                        
+                        //other directions
+                        this.createTileExplosions( this.bombRadius, 't', this.row, this.col);
+                        this.createTileExplosions( this.bombRadius, 'd', this.row, this.col);
+                        this.createTileExplosions( this.bombRadius, 'r', this.row, this.col);
+                        this.createTileExplosions( this.bombRadius, 'l', this.row, this.col);
+                        
+                        
+                    }
                 }
     },
     created: function() {
@@ -114,32 +148,8 @@ export default {
             this.changeBackground();
         }, this.bombTickRate);
 
-        setTimeout(function() {
-            //stop ticker background
-            clearInterval(this.tickBackgroundInterval);
-
-            this.backgroundPositionPointer = 0;
-
-            //trigger explosion
-            if (this.playground) {
-
-                let tiles = this.playground.$children[0].$children;
-
-                //center
-                let center = tiles.filter(child => child.row === this.row  && child.col ===this.col)[0];
-                center.$emit('bombExplosion','c');
-                
-                //other directions
-                this.createTileExplosions( this.bombRadius, 't', this.row, this.col);
-                this.createTileExplosions( this.bombRadius, 'd', this.row, this.col);
-                this.createTileExplosions( this.bombRadius, 'r', this.row, this.col);
-                this.createTileExplosions( this.bombRadius, 'l', this.row, this.col);
-                
-                this.$destroy();
-
-                //// remove the element from the DOM
-                this.$el.parentNode.removeChild(this.$el);
-            }
+        this.bomeExplosionTimeout = setTimeout(function() {
+            this.explodeBomb();
 
         }.bind(this), this.bombExplosionTimer);
 
