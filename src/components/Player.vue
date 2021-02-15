@@ -155,7 +155,6 @@ export default {
         }
     },
     mounted: function () {
-
         console.log('player mounted');
         this.$on('death', this.die);        
     }

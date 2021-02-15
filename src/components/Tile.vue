@@ -27,7 +27,8 @@ export default {
         }
 
         return {
-            'isDestroyableBlock' : isDestroyableBlock
+            'isDestroyableBlock' : isDestroyableBlock,
+            'backgroundImage': bombermanTiles,
         };
     },
     name: 'tile',
@@ -39,15 +40,15 @@ export default {
             const posLeft = col * 16;
             const posTop = row * 16;
 
-            var background;
+            let backgroundPosition;
             if (this.isBorder) {
-                background = 'url(\''+ bombermanTiles + '\')  -294px -461px';
+                backgroundPosition = '-294px -461px';
             } else if (this.isBlock) {
-                background = 'url(\''+ bombermanTiles + '\')  -294px -461px';
+                backgroundPosition = '-294px -461px';
             } else if (this.isDestroyableBlock) {
-                background = 'url(\''+ bombermanTiles + '\')  -311px -461px';
+                backgroundPosition = '-311px -461px';
             } else {
-                background = 'url(\''+ bombermanTiles + '\')  -328px -461px';
+                backgroundPosition = '-328px -461px';
             }
 
             return {
@@ -59,12 +60,14 @@ export default {
                 'image-rendering': 'pixelated',
                 'image-rendering': 'optimize-contrast',
                 '-ms-interpolation-mode': 'nearest-neighbor',
-
+                
                 'z-index': 100,
                 position: 'absolute',
+                'background-image':  'url(\'' + this.backgroundImage + '\')',                
+                'background-position': backgroundPosition,                                
                 //background: 'url(\'super_bomberman_tiles.png\')  -277px -461px',
                 //background: 'url(\'super_bomberman_tiles.png\')  -294px -461px',
-                background: background ,
+                //background: background ,
                 height: 16,
                 width: 16,
                 'top': posTop,
