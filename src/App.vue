@@ -92,53 +92,30 @@ module.exports = {
               }
 
         },
+        isKeyPressed: function (keyValue) {
+            if (this.keyboard.keys && this.keyboard.keys[keyValue]) {
+                return true;
+            }
+            return false;
+        
+        },
         updateGameArea: function () {
             if (this.player === null) {
                 this.player = this.$children.filter(child => child.$options._componentTag === 'player')[0];
             }
 
-
-            var tileHeight = 16;
-            var tileWidth = 16;
-
-
-
-            // myGamePiece.moveAngle = 0;
-            //myGamePiece.speed = 0;
-
+            if (this.player.isDeath) {                
+                return;
+            }
+           
             var oldTop = this.player.top;
             var oldLeft = this.player.left;
 
-            var currentFieldRow = Math.ceil((this.player.top + 6 ) / 16) ;
-            var currentFieldCol = Math.ceil((this.player.left) / 16);
 
-
-
-
-            var isRight = false;
-            var isDown = false;
-            var isLeft = false;
-            var isUp = false;
-
-            //left
-            if (this.keyboard.keys && this.keyboard.keys[37]) {
-                isLeft = true;
-            }
-
-            if (this.keyboard.keys && this.keyboard.keys[39]) {
-                //right
-                isRight = true;
-            }
-
-            //up
-            if (this.keyboard.keys && this.keyboard.keys[38]) {
-                isUp = true;
-            }
-
-            //down
-            if (this.keyboard.keys && this.keyboard.keys[40]) {
-                isDown = true;
-            }
+            var isRight = this.isKeyPressed(39);
+            var isDown = this.isKeyPressed(40);
+            var isLeft = this.isKeyPressed(37);
+            var isUp = this.isKeyPressed(38);        
 
 
             var newTop = oldTop;
@@ -168,11 +145,11 @@ module.exports = {
                 } else {
 
                     //TODO
-                    if (!newField1.isBlock) {
+                    if (newField1.isAccessible()) {
                         //this.player.top--;
                         helpTop= -1;
                     }
-                    if (!newField2.isBlock) {
+                    if (newField2.isAccessible()) {
                         //this.player.top++;
                         helpTop= 1;
                     }
@@ -199,11 +176,11 @@ module.exports = {
                 } else {
 
                     //TODO
-                    if (!newField1.isBlock) {
+                    if (newField1.isAccessible()) {
                         //this.player.top--;
                         helpTop= -1;
                     }
-                    if (!newField2.isBlock) {
+                    if (newField2.isAccessible()) {
                         //this.player.top++;
                         helpTop= 1;
                     }
@@ -218,16 +195,9 @@ module.exports = {
                 let newFieldRow = Math.ceil((newTop + 10 ) / 16) ;
                 let colPosition1 = (newLeft) - 15;
                 let colPosition2 = (newLeft);
-                let newFieldCol_1 = Math.ceil((colPosition1 ) / 16);
+                let newFieldCol_1 = Math.ceil((colPosition1) / 16);
                 let newFieldCol_2 = Math.ceil(((colPosition2) ) / 16);
 
-
-
-
-                // console.log('up');
-                // console.log(oldTop, newTop);
-                // console.log('currentField:' , currentFieldRow, currentFieldCol);
-                // console.log('newField:' , newFieldRow, newFieldCol_1, newFieldCol_2);
 
                 let newField1 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow && child.col === newFieldCol_1)[0];
                 let newField2 =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === newFieldRow && child.col === newFieldCol_2)[0];
@@ -238,11 +208,11 @@ module.exports = {
                     setNewTop = true;
                 } else {
                     //TODO
-                    if (!newField1.isBlock) {
+                    if (newField1.isAccessible()) {
                         //this.player.left--;
                         helpLeft = -1;
                     }
-                    if (!newField2.isBlock) {
+                    if (newField2.isAccessible()) {
                         //this.player.left++;
                         helpLeft = 1;
                     }
@@ -268,11 +238,11 @@ module.exports = {
                 } else {
 
                     //TODO
-                    if (!newField1.isBlock) {
+                    if (newField1.isAccessible()) {
                         //this.player.left--;
                         helpLeft = -1;
                     }
-                    if (!newField2.isBlock) {
+                    if (newField2.isAccessible()) {
                         //this.player.left++;
                         helpLeft = 1;
                     }
@@ -280,6 +250,7 @@ module.exports = {
             }
 
             //set the help, the normal movement can overrule
+            
             if (helpTop !== 0) {
                 this.player.top = this.player.top + helpTop;
             }
@@ -287,6 +258,7 @@ module.exports = {
                 this.player.left = this.player.left + helpLeft;
             }
 
+            
             if (setNewTop) {
                 this.player.top = newTop;
 
@@ -295,6 +267,15 @@ module.exports = {
                 this.player.left = newLeft;
 
             }
+            
+            let cells = this.player.getCurrentCells();            
+            
+            cells.forEach(cell => {
+                if (cell.isExploding()) {
+                    //trigger death
+                    this.player.$emit('death', 'doIt');
+                }
+            });
         }
     },
     created: function () {

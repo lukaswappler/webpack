@@ -10,10 +10,25 @@ import Bomb from './Bomb.vue'
 import BombExplosion from './BombExplosion.vue'
 
 export default {
-    props: ['col', 'row', 'isBorder', 'isBlock', 'isDestroyableBlock'],
+    props: ['col', 'row', 'isBorder', 'isBlock'],
     template: '<div v-bind:style="styleObject()"></div>',
     computed: {
 
+    },
+    data: function() {
+        let isDestroyableBlock = false;
+        
+          //Erste 3 Felder freihalten, ansonsten  zufällig füllen        
+        if (!((this.row == 1 && this.col ==1) ||
+            (this.row == 1 && this.col ==2) ||
+            (this.row == 2 && this.col ==1))  &&
+            Math.random() > 0.6) {
+            isDestroyableBlock = true;
+        }
+
+        return {
+            'isDestroyableBlock' : isDestroyableBlock
+        };
     },
     name: 'tile',
     methods: {
@@ -99,7 +114,9 @@ export default {
             instance.row = this.row;
             instance.col = this.col;
             instance.playground = this.$root;
-            
+
+            this.currentBombExplosion = instance;
+
 
             instance.$mount();
             this.$el.appendChild(instance.$el);
@@ -110,21 +127,21 @@ export default {
 
         isAccessible: function() {
             return !this.isBorder && !this.isBlock && !this.isDestroyableBlock;
+        },
+        isExploding: function() {
+            if (this.currentBombExplosion && this.currentBombExplosion.isActive) {
+                return true;
+            }
+            return false;
         }
 
     },
     created: function() {
-        console.log('tile created');
+        console.log('tile created');      
     },
     mounted: function () {
 
-        //Erste 3 Felder freihalten, ansonsten  zufällig füllen        
-        if (!((this.row == 1 && this.col ==1) ||
-            (this.row == 1 && this.col ==2) ||
-            (this.row == 2 && this.col ==1))  &&
-            Math.random() > 0.6) {
-            this.isDestroyableBlock = true;
-        }
+        
         
 
         console.log('tile mounted');

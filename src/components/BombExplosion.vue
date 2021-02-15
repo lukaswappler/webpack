@@ -110,6 +110,8 @@ export default {
                 this.$destroy();
                 //// remove the element from the DOM
                 this.$el.parentNode.removeChild(this.$el);
+
+                this.isActive = false;
             }
 
         }
@@ -118,6 +120,8 @@ export default {
     },
     mounted: function () {        
         this.backgroundPosition = this.backgroundPositions[this.explosionType][this.backgroundPositionPointer];
+
+        this.isActive = true;
 
         this.tickBackgroundInterval = setInterval(() => {
             this.changeBackground();

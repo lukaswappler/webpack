@@ -42,6 +42,14 @@ export default {
                     '-56px -20px',
                     '-73px -20px',
                     '-89px -20px'
+                ],
+                death: [
+                    '-30px -74px',
+                    '-49px -76px',
+                    '-66px -76px',
+                    '-83px -76px',
+                    '-100px -76px',
+                    '-118px -76px',
                 ]
             }
         };
@@ -88,6 +96,40 @@ export default {
             }
 
             this.lastMove = direction;
+        },        
+        getCurrentCells: function() {
+            let playerRow1 = Math.floor((this.top - 6 + 16 ) / 16) ;
+            let playerRow2 = Math.floor((this.top - 6 + 15 + 16) / 16) ;
+            let colPosition1 = (this.left) - 15;
+            let colPosition2 = (this.left);
+            let playerCol1 = Math.ceil((colPosition1) / 16);
+            let playerCol2 = Math.ceil(((colPosition2) ) / 16);
+
+            let tiles = this.$root.$children[0].$children;
+            return tiles.filter(child => 
+                (child.row === playerRow1 || child.row === playerRow2) &&
+                 (child.col === playerCol1 || child.col === playerCol2));           
+        },
+        die: function() {
+
+            this.isDeath = true;
+            
+            this.backgroundPositionDeathPointer = 0;
+            this.changeDeathBackground();
+
+            this.deathBackgroundInterval = setInterval(() => {
+                this.changeDeathBackground();
+            }, 200);
+
+        },
+        changeDeathBackground: function() {            
+            this.backgroundPosition = this.backgroundPositions.death[this.backgroundPositionDeathPointer];
+            this.backgroundPositionDeathPointer = this.backgroundPositionDeathPointer + 1;
+
+            //animation end
+            if (this.backgroundPositionDeathPointer >= this.backgroundPositions.death.length) {                
+                clearInterval(this.deathBackgroundInterval);
+            }
         }
     },
     watch: {
@@ -111,6 +153,11 @@ export default {
                 this.changeBackground('left');
             }
         }
+    },
+    mounted: function () {
+
+        console.log('player mounted');
+        this.$on('death', this.die);        
     }
 }
 </script>
