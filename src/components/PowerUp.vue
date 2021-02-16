@@ -17,6 +17,7 @@ export default {
             'width': 16,
             'height': 16,
             'powerUpBlinkRate': 500,
+            'type': 'bomb',
             'backgroundImage': bombermanPowerUp,
             'backgroundPositionPointer': 0,
             'backgroundPosition': '-188px -32px',
@@ -46,12 +47,10 @@ export default {
     created: function() {
         console.log('powerUp created');
     },
-    mounted: function () {
-        
+    mounted: function () {        
         this.tickBackgroundInterval = setInterval(() => {
             this.changeBackground();
         }, this.powerUpBlinkRate);
-
     },
     
 }

@@ -278,6 +278,11 @@ module.exports = {
                     //trigger death
                     this.player.$emit('death', 'doIt');
                 }
+                if (cell.hasPowerUp()) {
+                    //todo give it to player
+                    let powerUpType = cell.collectPowerUp();
+                    console.log(powerUpType);
+                }
             });
         }
     },

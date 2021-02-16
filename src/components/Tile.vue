@@ -154,6 +154,21 @@ export default {
                 this.$el.appendChild(instance.$el);
             }
         },
+        hasPowerUp: function() {
+            
+            if (this.currentPowerUp) {
+                console.log('hasPowerUp');
+                return true;
+            }
+        },
+        collectPowerUp: function () {
+            console.log('collect');
+            if (this.currentPowerUp) {
+                return this.currentPowerUp.type;
+            }
+            return null;
+        },
+
         destroyTile: function() {
 
             if (this.isDestroyableBlock) {
