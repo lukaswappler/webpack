@@ -8,6 +8,7 @@ import bombermanTiles from '.././assets/super_bomberman_tiles.png';
 
 import Bomb from './Bomb.vue'
 import BombExplosion from './BombExplosion.vue'
+import PowerUp from './PowerUp.vue'
 
 export default {
     props: ['col', 'row', 'isBorder', 'isBlock'],
@@ -109,9 +110,6 @@ export default {
             
         },
         addExplosion: function(explosionType) {
-            
-            
-
             //no explosion on solid things
             if (this.isBlock || this.isBorder) {
                 return;
@@ -139,6 +137,23 @@ export default {
             instance.$mount();
             this.$el.appendChild(instance.$el);
         },
+
+        addPowerUp: function() {
+            console.log('addPowerUp')
+            if (this.isAccessible()) {
+                let powerUp = Vue.extend(PowerUp);
+                let instance = new powerUp();
+                
+                instance.row = this.row;
+                instance.col = this.col;
+                instance.playground = this.$root;
+
+                this.currentPowerUp = instance;
+
+                instance.$mount();
+                this.$el.appendChild(instance.$el);
+            }
+        },
         destroyTile: function() {
 
             if (this.isDestroyableBlock) {
@@ -162,6 +177,11 @@ export default {
                 clearInterval(this.destroyTileInterval);
                 this.isDestroyableBlock = false;
                 this.backgroundPosition = this.greenBackground;
+
+                //todo trigger PowerUpCreation
+                if(Math.random() > 0.5) {
+                    this.addPowerUp();
+                }
             }
         },
 
@@ -184,7 +204,6 @@ export default {
         console.log('tile created');      
     },
     mounted: function () {
-
         this.$on('dropBombEvent', this.addBomb);
         this.$on('bombExplosion', this.addExplosion);
     }
