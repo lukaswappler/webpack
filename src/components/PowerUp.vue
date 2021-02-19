@@ -42,7 +42,14 @@ export default {
             this.backgroundPositionPointer = this.backgroundPositionPointer % this.backgroundPositions.length;
 
             this.backgroundPosition = this.backgroundPositions[this.backgroundPositionPointer];
-        }                      
+        },
+        removeIt: function () {
+            clearInterval(this.tickBackgroundInterval);
+            
+            this.$destroy();
+            //// remove the element from the DOM
+            this.$el.parentNode.removeChild(this.$el);
+        }                           
     },
     created: function() {
         console.log('powerUp created');

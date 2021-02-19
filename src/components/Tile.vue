@@ -95,7 +95,8 @@ export default {
                 'left': posLeft
             }
         },
-        addBomb: function() {
+        addBomb: function(bomb) {
+            /*
             let bombClass = Vue.extend(Bomb);
             let instance = new bombClass();
 
@@ -106,8 +107,13 @@ export default {
             this.currentBomb = instance;
 
             instance.$mount();
-            this.$el.appendChild(instance.$el);
             
+            this.$el.appendChild(instance.$el);
+            */
+           this.$el.appendChild(bomb.$el);
+        },
+        hasBomb: function() {
+            return this.currentBomb != null && this.currentBomb != undefined;
         },
         addExplosion: function(explosionType) {
             //no explosion on solid things
@@ -118,6 +124,7 @@ export default {
             if (this.currentBomb && !this.currentBomb.isExploded) {
                 console.log('double');
                 this.currentBomb.explodeBomb();
+                this.currentBomb = null;
             };
             
 
@@ -140,7 +147,7 @@ export default {
 
         addPowerUp: function() {
             console.log('addPowerUp')
-            if (this.isAccessible()) {
+            if (this.isAccessible() && !this.hasPowerUp()) {
                 let powerUp = Vue.extend(PowerUp);
                 let instance = new powerUp();
                 
@@ -164,14 +171,21 @@ export default {
         collectPowerUp: function () {
             console.log('collect');
             if (this.currentPowerUp) {
-                return this.currentPowerUp.type;
+
+                let type = this.currentPowerUp.type;
+                
+                this.currentPowerUp.removeIt();
+                this.currentPowerUp = null;
+
+                return type;
             }
             return null;
         },
 
         destroyTile: function() {
 
-            if (this.isDestroyableBlock) {
+            if (this.isDestroyableBlock && !this.destroyStared) {
+                this.destroyStared = true;
                 console.log("DESTROY");
 
                 this.backgroundPositionWallPointer = 0;
@@ -195,6 +209,7 @@ export default {
 
                 //todo trigger PowerUpCreation
                 if(Math.random() > 0.5) {
+
                     this.addPowerUp();
                 }
             }

@@ -75,7 +75,9 @@ export default {
         createTileExplosions: function (bombRadius, direction, row, col) {
                     let tiles = this.playground.$children[0].$children;
                     let foundTiles = new Array();
-                    
+                    console.log(row)
+                    console.log(col)
+                    console.log(bombRadius)
                     for (var i = 1; i <= bombRadius; i++) {
                         let tile;
 
@@ -113,6 +115,9 @@ export default {
 
                     //trigger explosion
                     if (this.playground) {
+
+                        console.log("XXXXXXXXXXXX");                    
+                        this.owner.reduceBombCount();
 
                         let tiles = this.playground.$children[0].$children;
 

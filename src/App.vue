@@ -75,23 +75,34 @@ module.exports = {
 
               //space pressed (32)
               if (event.keyCode === 32) {
-                  event.preventDefault();
+                event.preventDefault();
 
 
-                  if (this.player === null) {
-                      this.player = this.$children.filter(child => child.$options._componentTag === 'player')[0];
-                  }
-                  if (this.player.isDeath) {                
+                if (this.player === null) {
+                    this.player = this.$children.filter(child => child.$options._componentTag === 'player')[0];
+                }
+                if (this.player.isDeath) {                
                     return;
                 }
 
-                  let currentFieldRow = Math.ceil((this.player.top + 6 ) / 16) ;
-                  let currentFieldCol = Math.ceil((this.player.left) / 16);
 
-                  let currentField =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === currentFieldRow && child.col === currentFieldCol)[0];
 
-                  //drop bomb
-                  currentField.$emit('dropBombEvent', 'doIt');
+                //check max bombs                
+                
+                if (this.player.maxBombs > this.player.currentBombCount) {                            
+                    let currentFieldRow = Math.ceil((this.player.top + 6 ) / 16) ;
+                    let currentFieldCol = Math.ceil((this.player.left) / 16);
+
+                    let currentField =  this.$children.filter(child => child.$options._componentTag === 'tile' && child.row === currentFieldRow && child.col === currentFieldCol)[0];
+                    
+                    if (!currentField.hasBomb()) {
+                        //create and drop bomb
+                        let bomb = this.player.createBomb(currentField.row, currentField.col);                                        
+                        currentField.addBomb(bomb);
+                    }
+                }
+                
+                
               }
 
         },
@@ -282,6 +293,7 @@ module.exports = {
                     //todo give it to player
                     let powerUpType = cell.collectPowerUp();
                     console.log(powerUpType);
+                    this.player.addPowerUpByType(powerUpType);
                 }
             });
         }

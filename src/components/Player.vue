@@ -6,11 +6,18 @@
 <script>
 import bombermanPlayers from '.././assets/super_bomberman_players.png';
 
+import Bomb from './Bomb.vue'
+
 export default {
     data: function() {
         return {
             'top': 6,
             'left': 16,
+            
+            'currentBombCount': 0,
+            'maxBombs': 1,
+            'bombRadius': 1,
+            
             'backgroundChangeFrequency': 8,
             'backgroundImage': bombermanPlayers,
             'backgroundPosition': '-106px -46px',
@@ -130,6 +137,35 @@ export default {
             if (this.backgroundPositionDeathPointer >= this.backgroundPositions.death.length) {                
                 clearInterval(this.deathBackgroundInterval);
             }
+        },
+        addPowerUpByType: function(type) {
+            console.log(type);
+            if (type === 'bomb') {
+                this.maxBombs++;
+            }
+            else if (type === 'radius') {
+                this.bombRadius++;
+            }
+        },
+        createBomb: function(row, col) {
+            let bombClass = Vue.extend(Bomb);
+            let instance = new bombClass();
+
+            instance.row = row;
+            instance.col = col;
+            instance.owner = this;
+            instance.playground = this.$root;
+
+            this.currentBomb = instance;
+
+            instance.$mount();
+                        
+            this.currentBombCount++;
+
+            return instance;
+        },
+        reduceBombCount: function() {
+            this.currentBombCount--;
         }
     },
     watch: {
