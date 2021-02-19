@@ -85,10 +85,7 @@ module.exports = {
                     return;
                 }
 
-
-
                 //check max bombs                
-                
                 if (this.player.maxBombs > this.player.currentBombCount) {                            
                     let currentFieldRow = Math.ceil((this.player.top + 6 ) / 16) ;
                     let currentFieldCol = Math.ceil((this.player.left) / 16);
@@ -100,11 +97,8 @@ module.exports = {
                         let bomb = this.player.createBomb(currentField.row, currentField.col);                                        
                         currentField.addBomb(bomb);
                     }
-                }
-                
-                
+                }                            
               }
-
         },
         isKeyPressed: function (keyValue) {
             if (this.keyboard.keys && this.keyboard.keys[keyValue]) {
@@ -291,8 +285,7 @@ module.exports = {
                 }
                 if (cell.hasPowerUp()) {
                     //todo give it to player
-                    let powerUpType = cell.collectPowerUp();
-                    console.log(powerUpType);
+                    let powerUpType = cell.collectPowerUp();                    
                     this.player.addPowerUpByType(powerUpType);
                 }
             });

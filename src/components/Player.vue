@@ -138,8 +138,7 @@ export default {
                 clearInterval(this.deathBackgroundInterval);
             }
         },
-        addPowerUpByType: function(type) {
-            console.log(type);
+        addPowerUpByType: function(type) {            
             if (type === 'bomb') {
                 this.maxBombs++;
             }
@@ -190,8 +189,7 @@ export default {
             }
         }
     },
-    mounted: function () {
-        console.log('player mounted');
+    mounted: function () {        
         this.$on('death', this.die);        
     }
 }

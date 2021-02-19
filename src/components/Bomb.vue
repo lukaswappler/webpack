@@ -15,6 +15,7 @@ export default {
         return {
             'width': 16,
             'height': 16,
+            'isExploded': false,
             'bombRadius': 3,
             'bombTickRate': 200,
             'bombExplodeRate': 100,
@@ -75,9 +76,7 @@ export default {
         createTileExplosions: function (bombRadius, direction, row, col) {
                     let tiles = this.playground.$children[0].$children;
                     let foundTiles = new Array();
-                    console.log(row)
-                    console.log(col)
-                    console.log(bombRadius)
+                    
                     for (var i = 1; i <= bombRadius; i++) {
                         let tile;
 
@@ -114,9 +113,7 @@ export default {
                     this.backgroundPositionPointer = 0;
 
                     //trigger explosion
-                    if (this.playground) {
-
-                        console.log("XXXXXXXXXXXX");                    
+                    if (this.playground) {                        
                         this.owner.reduceBombCount();
 
                         let tiles = this.playground.$children[0].$children;
@@ -145,7 +142,7 @@ export default {
                 }
     },
     created: function() {
-        console.log('bomb created');
+        
     },
     mounted: function () {
         

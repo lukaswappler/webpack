@@ -69,9 +69,7 @@ export default {
 
             const posLeft = col * 16;
             const posTop = row * 16;
-
-           
-            console.log('style');
+                    
             return {
 
                 'image-rendering': 'optimizeSpeed',
@@ -85,10 +83,7 @@ export default {
                 'z-index': 100,
                 position: 'absolute',
                 'background-image':  'url(\'' + this.backgroundImage + '\')',                
-                'background-position': this.backgroundPosition,                                
-                //background: 'url(\'super_bomberman_tiles.png\')  -277px -461px',
-                //background: 'url(\'super_bomberman_tiles.png\')  -294px -461px',
-                //background: background ,
+                'background-position': this.backgroundPosition,                                                
                 height: 16,
                 width: 16,
                 'top': posTop,
@@ -96,39 +91,24 @@ export default {
             }
         },
         addBomb: function(bomb) {
-            /*
-            let bombClass = Vue.extend(Bomb);
-            let instance = new bombClass();
-
-            instance.row = this.row;
-            instance.col = this.col;
-            instance.playground = this.$root;
-
-            this.currentBomb = instance;
-
-            instance.$mount();
-            
-            this.$el.appendChild(instance.$el);
-            */
+           this.currentBomb = bomb;         
            this.$el.appendChild(bomb.$el);
         },
         hasBomb: function() {
-            return this.currentBomb != null && this.currentBomb != undefined;
+            return this.currentBomb != null && this.currentBomb != undefined && !this.currentBomb.isExploded;
         },
         addExplosion: function(explosionType) {
             //no explosion on solid things
             if (this.isBlock || this.isBorder) {
                 return;
             }
-            
-            if (this.currentBomb && !this.currentBomb.isExploded) {
-                console.log('double');
-                this.currentBomb.explodeBomb();
-                this.currentBomb = null;
-            };
-            
 
-            console.log('addExplosion');
+            if (this.currentBomb) {            
+                if (!this.currentBomb.isExploded) {                    
+                    this.currentBomb.explodeBomb();
+                    this.currentBomb = null;
+                } 
+            }
 
             let boom = Vue.extend(BombExplosion);
             let instance = new boom();
@@ -140,6 +120,9 @@ export default {
 
             this.currentBombExplosion = instance;
 
+            if (this.hasPowerUp()) {
+                this.collectPowerUp();
+            }
 
             instance.$mount();
             this.$el.appendChild(instance.$el);
@@ -209,7 +192,6 @@ export default {
 
                 //todo trigger PowerUpCreation
                 if(Math.random() > 0.5) {
-
                     this.addPowerUp();
                 }
             }
@@ -231,10 +213,9 @@ export default {
 
     },
     created: function() {
-        console.log('tile created');      
+
     },
-    mounted: function () {
-        this.$on('dropBombEvent', this.addBomb);
+    mounted: function () {        
         this.$on('bombExplosion', this.addExplosion);
     }
 }

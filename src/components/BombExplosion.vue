@@ -89,9 +89,8 @@ export default {
     },
     methods: {
         styleObject: function () {
-
             return {
-                  'background-image':  'url(\'' + this.backgroundImage + '\')',   
+                'background-image':  'url(\'' + this.backgroundImage + '\')',   
                 'background-position': this.backgroundPosition,
                 height: this.height,
                 width: this.width
