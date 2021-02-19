@@ -13,18 +13,27 @@ export default {
 
     },
     data: function() {
+
+        let type = Math.random() > 0.50000 ? 'bomb' : 'power';
+
         return {
             'width': 16,
             'height': 16,
             'powerUpBlinkRate': 500,
-            'type': 'bomb',
+            'type': type,
             'backgroundImage': bombermanPowerUp,
             'backgroundPositionPointer': 0,
-            'backgroundPosition': '-188px -32px',
-            'backgroundPositions': [
-                '-188px -32px',
-                '-188px -48px'
-            ]
+            'backgroundPosition': '',
+            'backgroundPositions': {
+                'bomb': [
+                    '-188px -32px',
+                    '-188px -48px'
+                ],
+                'power': [
+                    '-204px -32px',
+                    '-204px -48px'
+                ]
+            }
         }
     },
     methods: {
@@ -38,10 +47,11 @@ export default {
             }
         },
         changeBackground: function() {
+            let backgroundPosis = this.backgroundPositions[this.type];
             this.backgroundPositionPointer = this.backgroundPositionPointer + 1;
-            this.backgroundPositionPointer = this.backgroundPositionPointer % this.backgroundPositions.length;
+            this.backgroundPositionPointer = this.backgroundPositionPointer % backgroundPosis.length;
 
-            this.backgroundPosition = this.backgroundPositions[this.backgroundPositionPointer];
+            this.backgroundPosition = backgroundPosis[this.backgroundPositionPointer];
         },
         removeIt: function () {
             clearInterval(this.tickBackgroundInterval);
@@ -55,6 +65,7 @@ export default {
         console.log('powerUp created');
     },
     mounted: function () {        
+        this.changeBackground();
         this.tickBackgroundInterval = setInterval(() => {
             this.changeBackground();
         }, this.powerUpBlinkRate);

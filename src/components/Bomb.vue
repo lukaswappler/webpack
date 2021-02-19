@@ -19,7 +19,7 @@ export default {
             'bombRadius': 3,
             'bombTickRate': 200,
             'bombExplodeRate': 100,
-            'bombExplosionTimer': 2000,
+            'bombExplosionTimer': 2500,
             'tickBackgroundInterval': null,
             'exploadeBackgroundInterval': null,            
             'backgroundImage': bombermanTiles,

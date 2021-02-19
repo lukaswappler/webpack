@@ -135,7 +135,7 @@ export default {
                 let instance = new powerUp();
                 
                 instance.row = this.row;
-                instance.col = this.col;
+                instance.col = this.col;                
                 instance.playground = this.$root;
 
                 this.currentPowerUp = instance;
@@ -191,7 +191,7 @@ export default {
                 this.backgroundPosition = this.greenBackground;
 
                 //todo trigger PowerUpCreation
-                if(Math.random() > 0.5) {
+                if(Math.random() > 0.7) {
                     this.addPowerUp();
                 }
             }

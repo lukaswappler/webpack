@@ -16,7 +16,7 @@ export default {
             
             'currentBombCount': 0,
             'maxBombs': 1,
-            'bombRadius': 1,
+            'bombRadius': 2,
             
             'backgroundChangeFrequency': 8,
             'backgroundImage': bombermanPlayers,
@@ -142,7 +142,7 @@ export default {
             if (type === 'bomb') {
                 this.maxBombs++;
             }
-            else if (type === 'radius') {
+            else if (type === 'power') {
                 this.bombRadius++;
             }
         },
@@ -152,6 +152,7 @@ export default {
 
             instance.row = row;
             instance.col = col;
+            instance.bombRadius = this.bombRadius;
             instance.owner = this;
             instance.playground = this.$root;
 
