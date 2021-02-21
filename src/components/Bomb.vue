@@ -6,6 +6,10 @@
 <script>
 import bombermanTiles from '.././assets/super_bomberman_tiles.png';
 
+const soundExplodeRequire = require('file-loader!./../assets/sounds/explode.wav');
+import SoundExplode from '.././assets/sounds/explode.wav';
+
+
 export default {
     props: ['row', 'col'],    
     computed: {
@@ -107,6 +111,9 @@ export default {
                     });
                 },
                 explodeBomb: function() {
+                    const soundExplode = new Audio(SoundExplode);
+                    (() => soundExplode.play())();
+
                     //stop ticker background
                     clearInterval(this.tickBackgroundInterval);
 

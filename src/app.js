@@ -8,6 +8,8 @@ import PowerUp from './components/PowerUp.vue';
 
 import App from './App.vue';
 
+//const soundExplode = require('file-loader!./assets/sounds/explode.wav');
+
 Vue.component('player', Player);
 Vue.component('tile', Tile);
 Vue.component('bomb', Bomb);

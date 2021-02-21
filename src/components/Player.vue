@@ -136,6 +136,9 @@ export default {
             //animation end
             if (this.backgroundPositionDeathPointer >= this.backgroundPositions.death.length) {                
                 clearInterval(this.deathBackgroundInterval);
+
+                //to get sure, that the last position is the end.
+                this.backgroundPosition = this.backgroundPositions.death[this.backgroundPositions.death.length - 1];
             }
         },
         addPowerUpByType: function(type) {            
