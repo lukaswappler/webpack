@@ -1,7 +1,7 @@
 <template>
      <div id="playground" v-bind:style="styleObject()">
 
-        <player></player>
+        <player></player>        
 
         <div v-for="row in field">
 

@@ -9,6 +9,7 @@ import bombermanTiles from '.././assets/super_bomberman_tiles.png';
 import Bomb from './Bomb.vue'
 import BombExplosion from './BombExplosion.vue'
 import PowerUp from './PowerUp.vue'
+import Enemy from './Enemy.vue'
 
 export default {
     props: ['col', 'row', 'isBorder', 'isBlock'],
@@ -144,6 +145,25 @@ export default {
                 this.$el.appendChild(instance.$el);
             }
         },
+
+        addEnemy: function() {
+            console.log('addEnemyy')
+            if (this.isAccessible()) {
+                let enemy = Vue.extend(Enemy);
+                let instance = new enemy();
+                
+                instance.top = this.row * 16  ;
+                instance.left = this.col * 16 ;                
+                instance.playground = this.$root;
+
+                //this.currentPowerUp = instance;
+
+                instance.$mount();
+                this.$root.$el.appendChild(instance.$el);
+                //this.$el.appendChild(instance.$el);
+            }
+        },
+
         hasPowerUp: function() {
             
             if (this.currentPowerUp) {
@@ -151,8 +171,7 @@ export default {
                 return true;
             }
         },
-        collectPowerUp: function () {
-            console.log('collect');
+        collectPowerUp: function () {            
             if (this.currentPowerUp) {
 
                 let type = this.currentPowerUp.type;
@@ -168,8 +187,7 @@ export default {
         destroyTile: function() {
 
             if (this.isDestroyableBlock && !this.destroyStared) {
-                this.destroyStared = true;
-                console.log("DESTROY");
+                this.destroyStared = true;              
 
                 this.backgroundPositionWallPointer = 0;
                 this.changeWallBreakBackground();
@@ -217,6 +235,18 @@ export default {
     },
     mounted: function () {        
         this.$on('bombExplosion', this.addExplosion);
+
+
+        //calculate enemies
+        if (this.isAccessible() &&
+            !((this.row == 1 && this.col ==1) ||
+            (this.row == 1 && this.col ==2) ||
+            (this.row == 2 && this.col ==1))  &&
+            Math.random() > 0.95) {
+            
+            this.addEnemy();
+        }
+        
     }
 }
 </script>

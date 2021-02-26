@@ -1,6 +1,9 @@
 import Vue from 'vue';
 
 import Player from './components/Player.vue';
+
+import Enemy from './components/Enemy.vue';
+
 import Tile from './components/Tile.vue';
 import Bomb from './components/Bomb.vue';
 import BombExplosion from './components/BombExplosion.vue';
@@ -8,7 +11,7 @@ import PowerUp from './components/PowerUp.vue';
 
 import App from './App.vue';
 
-//const soundExplode = require('file-loader!./assets/sounds/explode.wav');
+
 
 Vue.component('player', Player);
 Vue.component('tile', Tile);
@@ -16,6 +19,7 @@ Vue.component('bomb', Bomb);
 Vue.component('bombexplosion', BombExplosion);
 Vue.component('powerUp', PowerUp);
 
+Vue.component('enemy', Enemy);
 
 new Vue({
     el: '#app',
@@ -24,6 +28,7 @@ new Vue({
         Player,
         Tile,
         Bomb,
-        PowerUp
+        PowerUp,
+        Enemy
     }
 });
