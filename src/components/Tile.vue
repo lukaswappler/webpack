@@ -155,12 +155,17 @@ export default {
                 instance.top = this.row * 16  ;
                 instance.left = this.col * 16 ;                
                 instance.playground = this.$root;
+                
+
+                
 
                 //this.currentPowerUp = instance;
 
                 instance.$mount();
                 this.$root.$el.appendChild(instance.$el);
                 //this.$el.appendChild(instance.$el);
+
+                //console.log(this.$root.$children[0].player);
             }
         },
 

@@ -118,16 +118,16 @@ export default {
                  (child.col === playerCol1 || child.col === playerCol2));           
         },
         die: function() {
-
-            this.isDeath = true;
-            
-            this.backgroundPositionDeathPointer = 0;
-            this.changeDeathBackground();
-
-            this.deathBackgroundInterval = setInterval(() => {
+            if (!this.isDeath) {    
+                this.isDeath = true;
+                
+                this.backgroundPositionDeathPointer = 0;
                 this.changeDeathBackground();
-            }, 200);
 
+                this.deathBackgroundInterval = setInterval(() => {
+                    this.changeDeathBackground();
+                }, 200);
+            }
         },
         changeDeathBackground: function() {            
             this.backgroundPosition = this.backgroundPositions.death[this.backgroundPositionDeathPointer];

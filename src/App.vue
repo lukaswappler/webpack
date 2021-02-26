@@ -26,6 +26,7 @@ module.exports = {
           message2: 'field',
           player: null,
           pixelmap: null,
+          enemies: [],
           keyboard: {
               keys: {}
           }
@@ -282,13 +283,17 @@ module.exports = {
                 if (cell.isExploding()) {
                     //trigger death
                     this.player.$emit('death', 'doIt');
-                }
+                }                
+
                 if (cell.hasPowerUp()) {
                     //todo give it to player
                     let powerUpType = cell.collectPowerUp();                    
                     this.player.addPowerUpByType(powerUpType);
                 }
             });
+
+            //let enemies = this.$children.filter(child => child.$options._componentTag === 'enemy')
+            //consloe.log(enemies);
         }
     },
     created: function () {
