@@ -155,35 +155,17 @@ export default {
             let pTopStart = player.top;
             let pTopEnd = player.top + 26;
 
-            //console.log(pLeftStart, pLeftEnd, pTopStart, pTopEnd);
-            //console.log(this.left);
-            //console.log(this.top);
-
             //prüfen
-            
             if (
-
             (this.top < pTopEnd || this.top + 16 < pTopStart )
             &&
             (this.left < pLeftEnd || this.left + 16 < pLeftStart)
             && 
             !this.isDeath
             ) {
-                //console.log(this.top, this.left);
-                //console.log(pTopStart, pTopEnd, pLeftStart, pLeftEnd);
-                player.die();
-                 //this.die();
+                player.die();                
             }
 
-            
-            
-            //console.log(player.top);
-            //console.log(player.left);
-
-
-
-
-            //console.log('move');
             let currentCells = this.getCurrentCells();
             let currentCell = currentCells[0];
 
